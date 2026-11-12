@@ -1,7 +1,5 @@
-#include <stdlib.h>
 #include <stdint.h>
 #include <stddef.h>
-#include "hmac/hmac.h"
 #include <string.h>
 #include "pbkdf2.h"
 
