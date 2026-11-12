@@ -41,7 +41,7 @@ int main(void){
     failures += run_case("case 2", "password", "salt", 2, 32, expected_hex_two);
     failures += run_case("case 3", "password", "salt", 4096, 32, expected_hex_three);
     failures += run_case("case 4", "passwordPASSWORDpassword", "saltSALTsaltSALTsaltSALTsaltSALTsalt", 4096, 40, expected_hex_four);
-    failures += run_case("case 5", "passwrd", "salt", 1, 64, expected_hex_five);
+    failures += run_case("case 5", "passwd", "salt", 1, 64, expected_hex_five);
 
     //Error Paths
     uint8_t out_f1[32];
