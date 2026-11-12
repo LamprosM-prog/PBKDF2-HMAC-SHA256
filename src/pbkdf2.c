@@ -60,7 +60,26 @@ static int pbkdf2_f(const uint8_t *password, size_t password_len, const uint8_t 
 
 
 }
-int pbkdf2_hmac_sha256(const uint8_t *password, size_t password_len,
-      const uint8_t *salt, size_t salt_len, uint32_t iteration_count,uint8_t *output, size_t out_len){
-
+int pbkdf2_hmac_sha256(const uint8_t *password, size_t password_len, const uint8_t *salt, size_t salt_len, uint32_t iteration_count,uint8_t *output, size_t out_len)
+{
+    if(password == NULL || salt == NULL || output == NULL || out_len == 0){
+        return -1;
     }
+    uint32_t block_index = 1;
+    size_t offset = 0;
+    uint8_t temp[32];   
+    while(offset < out_len){
+        if(pbkdf2_f(password,password_len, salt, salt_len, iteration_count, block_index, temp) != 0){
+            secure_zero(temp, 32);
+            secure_zero(output, offset);
+            return -1;
+        }
+        size_t remaining = out_len - offset;
+        size_t chunk = remaining < 32 ? remaining : 32;
+        memcpy(output + offset, temp, chunk);
+        offset += chunk;
+        block_index++;
+    }
+    secure_zero(temp,32);
+    return 0;
+}
