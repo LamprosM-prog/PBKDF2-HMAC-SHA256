@@ -16,24 +16,35 @@ to use it.
 DK = PBKDF2(PRF, password, salt, c, dk_len)
 
 DK = Derived Key.
+
 PRF = In our case this is HMAC-SHA256
+
 password = The password from which we will derive a key.
+
 salt = salt.
+
 c = number of iterations.
+
 dk_len = The desired byte-length of DK.
 
 This implementation works in 32-byte blocks (Ti) indexed at 1 (as specified in NIST)
 With T_last being truncated to fit the requested size (If the dk_len isn't a multiple of 32).
+
 Where:
+```
 DK = T1 + T2 + T3 ...
 Ti = F(password, salt, c, i)
-
+```
 With F being the XOR of c iterations of PRFs. The first PRF uses the PRF key, and the subsequent 
 use password as the PRF key (with the first PRF output as input). Basically :
 F(password, salt, c, i) = U1 XOR U2 XOR U3 ... Uc
+
 With:
+
+```
 U1 = PRF(password, Salt + (32 bit integer))
 Uc = PRF(password, U(c-1))
+```
 
 ## API and Design-Notes
 The signature is :
